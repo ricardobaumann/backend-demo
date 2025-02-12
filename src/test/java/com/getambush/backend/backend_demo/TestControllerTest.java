@@ -7,13 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest
 @EnableWebMvc
@@ -32,20 +30,19 @@ class TestControllerTest {
 
     @Test
     void shouldValidatePost() throws Exception {
-        String resultBody = mockMvc.perform(post("/test")
+        mockMvc.perform(post("/test")
                         .content("""
                                 { "foo": "" }
                                 """)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
-                .andDo(print())
-                .andReturn().getResponse().getContentAsString();
-        assertThat(resultBody).isEqualToIgnoringWhitespace("""
-                {"code":"VALIDATION_FAILED",
-                "message":"Validation failed for object='test'. Error count: 1",
-                "fieldErrors":[{"code":"REQUIRED_NOT_EMPTY","property":"foo",
-                "message":"must not be empty","rejectedValue":"","path":"foo"}]}
-                """);
+                .andExpect(content().json("""
+                                {"code":"VALIDATION_FAILED",
+                        "message":"Validation failed for object='test'. Error count: 1",
+                        "fieldErrors":[{"code":"REQUIRED_NOT_EMPTY","property":"foo",
+                        "message":"must not be empty","rejectedValue":"","path":"foo"}]}
+                        """))
+                .andDo(print());
     }
 }
