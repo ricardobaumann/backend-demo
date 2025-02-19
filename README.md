@@ -1,4 +1,4 @@
-# Bookstore Management API
+# Backend demo API
 
 ## Requirements
 
