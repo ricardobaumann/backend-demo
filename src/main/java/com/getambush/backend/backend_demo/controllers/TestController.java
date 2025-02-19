@@ -14,12 +14,12 @@ public class TestController {
     private final TestService testService;
 
     @GetMapping
-    public Test get() {
-        return new Test("bar");
+    public TestInput get() {
+        return new TestInput("bar");
     }
 
     @PostMapping
-    public void post(@RequestBody @Valid Test test) {
-        testService.create(test);
+    public void post(@RequestBody @Valid TestInput testInput) {
+        testService.create(testInput);
     }
 }
