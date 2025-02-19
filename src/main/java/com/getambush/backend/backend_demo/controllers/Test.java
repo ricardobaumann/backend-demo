@@ -1,4 +1,4 @@
-package com.getambush.backend.backend_demo;
+package com.getambush.backend.backend_demo.controllers;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
