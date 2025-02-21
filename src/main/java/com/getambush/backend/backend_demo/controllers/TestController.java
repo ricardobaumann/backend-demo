@@ -35,3 +35,15 @@ public class TestController {
 
 
 }
+
+/*
+Products list/search
+- User should be able to search for products, applying the filters:
+  - name (open input)
+  - category (select input)
+  - price range (select input OR slider) - we can abstract to min/max
+  - page (query should be paginated)
+- Server-side cache
+  - We should implement a caching layer to avoid doing the same query multiple times
+*/
+
