@@ -12,5 +12,8 @@
     * PUT /books/{bookId}: Update book details.
     * GET /books/{bookId}: Get a book details.
     * DELETE /books/{bookId}: Remove a book from the catalog.
+    * Create/update Business rule
+    * Cache
+    * Debounce
     * POST /orders: Create a new order
     * GET /orders/{orderId}: Retrieve order by id 
