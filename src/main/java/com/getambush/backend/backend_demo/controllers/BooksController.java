@@ -40,7 +40,6 @@ public class BooksController {
 
     @SneakyThrows
     @PutMapping("/{id}")
-    //TODO debounce
     public ResponseEntity<Void> put(@PathVariable UUID id, @RequestBody @Valid BookInput bookInput) {
 
         return bookService.update(id, bookInput) ? ResponseEntity.ok().build() :
