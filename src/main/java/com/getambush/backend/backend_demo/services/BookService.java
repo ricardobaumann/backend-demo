@@ -30,6 +30,8 @@ public class BookService {
     }
 
     public Boolean update(final UUID id, final BookInput bookInput) {
+        //id do livro nao pode mudar
+        //atualiyaz livro que nao existe = erro
         if (bookRepo.existsByName(bookInput.name())) {
             throw new DuplicatedBookName(bookInput.name());
         }
