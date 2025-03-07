@@ -16,4 +16,5 @@
     * Cache
     * Debounce
     * POST /orders: Create a new order
-    * GET /orders/{orderId}: Retrieve order by id 
+    * GET /orders/{orderId}: Retrieve order by id
+    * Accept-Language

@@ -8,4 +8,6 @@ import java.util.UUID;
 
 @Repository
 public interface BookRepo extends CrudRepository<Book, UUID> {
+    
+    boolean existsByName(String name);
 }

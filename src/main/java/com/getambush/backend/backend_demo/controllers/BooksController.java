@@ -41,7 +41,6 @@ public class BooksController {
     @SneakyThrows
     @PutMapping("/{id}")
     public ResponseEntity<Void> put(@PathVariable UUID id, @RequestBody @Valid BookInput bookInput) {
-
         return bookService.update(id, bookInput) ? ResponseEntity.ok().build() :
                 ResponseEntity.created(new URI("/books/" + id)).build();
     }
