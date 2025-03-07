@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -19,12 +18,9 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping
-    public List<ProductPayload> search(@ModelAttribute ProductPayload productPayload) {
-        log.info("Filters: {}", productPayload);
-        return List.of(
-                new ProductPayload("name", "category",
-                        new PriceRange(new BigDecimal(0), new BigDecimal(100)))
-        );
+    public List<ProductSearchPayload> search(@ModelAttribute ProductSearchPayload productSearchPayload) {
+        log.info("Filters: {}", productSearchPayload);
+        return productService.search(productSearchPayload);
     }
 
 }
