@@ -4,6 +4,7 @@ import com.getambush.backend.backend_demo.controllers.input.BookInput;
 import com.getambush.backend.backend_demo.controllers.output.ResourceRef;
 import com.getambush.backend.backend_demo.entities.Book;
 import com.getambush.backend.backend_demo.exceptions.DuplicatedBookName;
+import com.getambush.backend.backend_demo.exceptions.InexistentBook;
 import com.getambush.backend.backend_demo.repos.BookRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,19 +30,16 @@ public class BookService {
         return new ResourceRef(book.getId());
     }
 
-    public Boolean update(final UUID id, final BookInput bookInput) {
-        //id do livro nao pode mudar
-        //atualiyaz livro que nao existe = erro
-        if (bookRepo.existsByName(bookInput.name())) {
+    public Book update(final UUID id, final BookInput bookInput) {
+        Book thisBook = bookRepo.findById(id)
+                .orElseThrow(() -> new InexistentBook(id));
+
+        if (!thisBook.getName().equals(bookInput.name()) && bookRepo.existsByName(bookInput.name())) {
             throw new DuplicatedBookName(bookInput.name());
         }
-        Boolean existent = bookRepo.existsById(id);
 
-        Book book = new Book();
-        book.setId(id);
-        book.setName(bookInput.name());
-        bookRepo.save(book);
-        return existent;
+        thisBook.setName(bookInput.name());
+        return bookRepo.save(thisBook);
     }
 
     public Optional<Book> getByID(final UUID id) {

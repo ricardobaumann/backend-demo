@@ -8,12 +8,14 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.UUID;
 
 @Slf4j
@@ -30,7 +32,8 @@ public class BooksController {
         return bookService.create(bookInput);
     }
 
-    @GetMapping("/{id}")//books/123
+    @Cacheable(key = "#id", cacheNames = "books")
+    @GetMapping("/{id}")
     public ResponseEntity<BookOutput> get(@PathVariable UUID id) {
         return bookService.getByID(id)
                 .map(book -> conversionService.convert(book, BookOutput.class))
@@ -40,12 +43,13 @@ public class BooksController {
 
     @SneakyThrows
     @PutMapping("/{id}")
-    public ResponseEntity<Void> put(@PathVariable UUID id, @RequestBody @Valid BookInput bookInput) {
-        return bookService.update(id, bookInput) ? ResponseEntity.ok().build() :
-                ResponseEntity.created(new URI("/books/" + id)).build();
+    @CachePut(key = "#id", cacheNames = "books")
+    public BookOutput put(@PathVariable UUID id, @RequestBody @Valid BookInput bookInput) {
+        return conversionService.convert(bookService.update(id, bookInput), BookOutput.class);
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(key = "#id", cacheNames = "books")
     public void delete(@PathVariable UUID id) {
         bookService.delete(id);
     }
