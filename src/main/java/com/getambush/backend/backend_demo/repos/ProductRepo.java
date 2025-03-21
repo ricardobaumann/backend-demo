@@ -11,10 +11,12 @@ import java.util.UUID;
 @Repository
 public interface ProductRepo extends CrudRepository<Product, UUID> {
 
-    //TODO SQL, JPAQL
     @Query("""
-                        
+            select p from Product p
+                where (:name is null or p.name like %:name)
+                AND (:category IS NULL OR p.category = :category)
+                AND (:priceInCentsMin IS NULL OR p.priceInCents >= :priceInCentsMin)
+                AND (:priceInCentsMax IS NULL OR p.priceInCents <= :priceInCentsMax)
             """)
-    public List<Product> findBy(String name, String category, Integer priceInCentsMin, Integer priceInCentsMax);
-
+    List<Product> findBy(String name, String category, Integer priceInCentsMin, Integer priceInCentsMax);
 }

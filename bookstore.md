@@ -10,5 +10,11 @@
     * GET /books: Retrieve all books with filters (e.g., by category or author).
     * POST /books: Add a new book to the catalog.
     * PUT /books/{bookId}: Update book details.
+    * GET /books/{bookId}: Get a book details.
     * DELETE /books/{bookId}: Remove a book from the catalog.
-    * GET /orders/{orderId}/books: Retrieve books associated with a specific order.
+    * Create/update Business rule
+    * Cache
+    * Debounce
+    * POST /orders: Create a new order
+    * GET /orders/{orderId}: Retrieve order by id
+    * Accept-Language

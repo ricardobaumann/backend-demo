@@ -35,3 +35,16 @@ databaseChangeLog:
               - column:
                   name: "price_in_cents"
                   type: "integer"
+        - createIndex:
+            indexName: "idx_product_category"
+            tableName: "products"
+            columns:
+              - column:
+                  name: "category"
+        - createIndex:
+            indexName: "idx_product_price"
+            tableName: "products"
+            columns:
+              - column:
+                  name: "price_in_cents"
+
