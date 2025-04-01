@@ -1,31 +1,54 @@
 package com.getambush.backend.backend_demo.services;
 
+import com.getambush.backend.backend_demo.controllers.input.BookInput;
+import com.getambush.backend.backend_demo.exceptions.DuplicatedBookName;
+import com.getambush.backend.backend_demo.repos.BookRepo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.Mockito;
 
-@RunWith(MockitoJUnitRunner.class)
+import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
 class BookServiceTest {
+    private final BookRepo bookRepo = Mockito.mock(BookRepo.class);
+    private BookService bookService;
 
-    //TODO unit test
     @BeforeEach
     void setUp() {
+        bookService = new BookService(bookRepo);
     }
 
     @Test
-    void create() {
+    void shouldCreateBook() {
+        //Given
+        when(bookRepo.existsByName("foo"))
+                .thenReturn(false);
+
+        //When //Then
+        assertThat(bookService.create(new BookInput(
+                "foo",
+                Collections.emptyList()
+        ))).hasNoNullFieldsOrProperties();
     }
 
     @Test
-    void update() {
+    void shouldNotCreateDuplicateBook() {
+        // Given
+        when(bookRepo.existsByName("foo"))
+                .thenReturn(true);
+
+        // When & Then
+        assertThatThrownBy(() -> bookService.create(new BookInput(
+                "foo",
+                Collections.emptyList()
+        ))).isInstanceOf(DuplicatedBookName.class)
+                .hasMessage("The book name foo is already taken");
     }
 
-    @Test
-    void getByID() {
-    }
+    //TODO unit tests
 
-    @Test
-    void delete() {
-    }
 }
