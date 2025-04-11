@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @Repository
 public interface ProductRepo extends CrudRepository<Product, UUID> {
-
+    
     @Query("""
             select p from Product p
                 where (:name is null or p.name like %:name)

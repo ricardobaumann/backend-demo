@@ -1,8 +1,11 @@
 package com.getambush.backend.backend_demo.controllers;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record ProductSearchPayload(
         String name,
-        String category,
+        @NotNull @NotBlank String category,
         PriceRange price
 ) {
 }
