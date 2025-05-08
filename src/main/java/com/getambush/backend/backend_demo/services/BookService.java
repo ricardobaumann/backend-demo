@@ -8,7 +8,9 @@ import com.getambush.backend.backend_demo.exceptions.InexistentBook;
 import com.getambush.backend.backend_demo.repos.BookRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -16,20 +18,25 @@ import java.util.UUID;
 @AllArgsConstructor
 public class BookService {
     private final BookRepo bookRepo;
+    private final AuthorService authorService;
 
+    @Transactional
     public ResourceRef create(final BookInput bookInput) {
         if (bookRepo.existsByName(bookInput.name())) {
             throw new DuplicatedBookName(bookInput.name());
         }
+
         Book book = new Book();
         book.setId(UUID.randomUUID());
         book.setName(bookInput.name());
+        book.setAuthors(authorService.getOrCreateAuthors(new HashSet<>(bookInput.authors())));
 
         bookRepo.save(book);
 
         return new ResourceRef(book.getId());
     }
 
+    @Transactional
     public Book update(final UUID id, final BookInput bookInput) {
         Book thisBook = bookRepo.findById(id)
                 .orElseThrow(() -> new InexistentBook(id));
@@ -39,6 +46,8 @@ public class BookService {
         }
 
         thisBook.setName(bookInput.name());
+        thisBook.setAuthors(authorService.getOrCreateAuthors(new HashSet<>(bookInput.authors())));
+
         return bookRepo.save(thisBook);
     }
 
