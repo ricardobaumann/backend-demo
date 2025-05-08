@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,7 +28,7 @@ public class BookService {
         Book book = new Book();
         book.setId(UUID.randomUUID());
         book.setName(bookInput.name());
-        book.setAuthors(authorService.getOrCreateAuthors(new HashSet<>(bookInput.authors())));
+        book.setAuthors(authorService.getOrCreateAuthors(bookInput.authors()));
 
         bookRepo.save(book);
 
@@ -46,7 +45,7 @@ public class BookService {
         }
 
         thisBook.setName(bookInput.name());
-        thisBook.setAuthors(authorService.getOrCreateAuthors(new HashSet<>(bookInput.authors())));
+        thisBook.setAuthors(authorService.getOrCreateAuthors(bookInput.authors()));
 
         return bookRepo.save(thisBook);
     }
